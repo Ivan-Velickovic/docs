@@ -23,8 +23,6 @@ System-on-Chip.
 
 <https://wiki.odroid.com/odroid-c4/odroid-c4>
 
-Only 64-bit mode is supported both with and without SMP, and hypervisor mode.
-
 ## U-Boot
 
 The board comes with U-Boot already on it, this should work but you can also
