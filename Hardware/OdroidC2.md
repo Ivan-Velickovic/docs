@@ -5,7 +5,7 @@ cmake_plat: odroidc2
 xcompiler_arg: -DAARCH64=1
 platform: Odroid-C2
 arch: ARMv8A, AArch64 only
-virtualization: "No"
+virtualization: "Yes"
 iommu: "No"
 soc: Amlogic S905
 cpu: Cortex-A53
@@ -22,9 +22,6 @@ The Odroid-C2 is a single board computer based on the Amlogic S905
 System-on-Chip.
 
 <https://wiki.odroid.com/odroid-c2/odroid-c2>
-
-Only 64-bit mode is supported both with and without SMP. Hypervisor
-support has not been tested.
 
 ## U-Boot
 
