@@ -3,7 +3,7 @@ toc: true
 arm_hardware: true
 cmake_plat: imx8mq-evk
 xcompiler_arg: -DAARCH64=1
-platform: imx8mq
+platform: i.MX8MQ
 arch: ARMv8A
 virtualization: "No"
 iommu: "No"
@@ -15,7 +15,7 @@ Maintained: seL4 Foundation
 SPDX-License-Identifier: CC-BY-SA-4.0
 SPDX-FileCopyrightText: 2020 seL4 Project a Series of LF Projects, LLC.
 ---
-# Imx8mq
+# i.MX8MQ
 
 ## Building seL4test
 
