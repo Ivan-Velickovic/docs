@@ -17,39 +17,17 @@ SPDX-FileCopyrightText: 2020 seL4 Project a Series of LF Projects, LLC.
 
 # Raspberry Pi 4 Model B
 
-## Serial connection
-Serial TX and RX are located at GPIO pins 14 and 15 respectively.
-
 ## U-Boot
 
-Right now, the default U-Boot will not successfully boot an seL4 image
-on the RPi4 because of cache configuration issues in the seL4
-ELFLoader. This problem can be remedied by having U-boot disable caches
-before loading seL4. Unfortunately, the stock upstream U-boot used to
-disable caches before loading the kernel image, but as of this patch
-(<https://github.com/u-boot/u-boot/commit/995eab8b5b580b67394312b1621c60a71042cd18>),
-U-boot no longer disables caches.
-
-In order to obtain a U-boot binary that disables caching, you should
-compile U-Boot from source yourself.
-You can do this by cloning U-boot from upstream,
-then reverting commit 995eab8b5b580b67394312b1621c60a71042cd18, and then
-building it:
 ```bash
 git clone https://github.com/u-boot/u-boot.git u-boot
 cd u-boot
-git revert 995eab8b5b580b67394312b1621c60a71042cd18
 make CROSS_COMPILE=aarch64-linux-gnu- rpi_4_defconfig
 make CROSS_COMPILE=aarch64-linux-gnu-
 ```
 
 This will enable you to get the most up-to-date U-boot which will boot
 seL4 on the RPi4 successfully.
-
-**NOTE:** Automatic revert is not going to work if you are using the
-latest version of u-boot. You need to manually revert the change by
-looking at the changeset.
-
 
 ## SD card setup
  The PI boots from the first FAT32 partition on the
@@ -69,28 +47,32 @@ directory of this partition.
 
 ## Getting seL4 onto your Raspberry Pi 4
 
-Because you have applied a device tree overlay to use the UART on GPIO pins 14 and 15,
-you will have to update seL4 to use serial0 instead of serial1.
-In the kernel at `src/plat/bcm2711/overlay-rpi4.dts`, you should replace all instances of
-`serial1` with `serial0`.
+### Building seL4Test
 
-Then, you should then build the kernel, such as in seL4test:
+The last step is to build an seL4 image and run it on your RPi4. To do this, we will build the seL4Test project with the following commands:
 
 {% include sel4test.md %}
 
+### Running seL4Test
+
+#### Serial connection
+Serial TX and RX are located at GPIO pins 14 and 15 respectively. Connecting to this UART will enable you to see the output from U-Boot and seL4Test.
+
 The boot method described here is through the SD card. You should set up the files
-on your SD card as described in the previous section.
+on your SD card as described above.
 
 Following this, copy your seL4 image (such as an seL4test image) onto
 the SD card in its root directory. You can now remove the SD
 card from your PC and re-insert it into the RPi4, and power the RPi4 on.
 
 When the RPi4 boots up, be sure to interrupt the boot process and drop
-into the U-boot command prompt. From the U-boot command prompt, type
-something like the following: `fatls mmc 0`. If you don't see your seL4 image
+into the U-Boot command prompt.
+
+From the command prompt, run the
+command: `fatls mmc 0`. This will print out all the files on the SD card. If you don't see your seL4 image
 filename printed out, then you might need to double-check your steps
 so far to make sure you didn't forget something along the way. If you
-see your file listed, then do something like:
+see your file listed, then run the following commands to load the image into memory and then boot it.
 ```
 fatload mmc 0 0x10000000 sel4test-driver-image-arm-bcm2711
 bootefi 0x10000000

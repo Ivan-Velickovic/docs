@@ -15,7 +15,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 SPDX-FileCopyrightText: 2020 seL4 Project a Series of LF Projects, LLC.
 ---
 
-# Raspberry PI 3 Model B and Model B+
+# Raspberry Pi 3 Model B and Model B+
 
 This is an experimental port and is not guaranteed to work.
 
@@ -25,58 +25,55 @@ This is an experimental port and is not guaranteed to work.
 
 |Feature |Part |Datasheet |
 |-|-|-|
-|USB+ETH |SMSC LAN9514|[9514.pdf](http://ww1.microchip.com/downloads/en/DeviceDoc/9514.pdf)| 
+|USB+ETH |SMSC LAN9514|[9514.pdf](http://ww1.microchip.com/downloads/en/DeviceDoc/9514.pdf)|
 |SoC |BCM2837 | |
 
 ## Running seL4 on the Raspberry Pi 3B/3B+
-
 
 Please also find a feature article going on seL4 the Raspberry Pi 3
 [on our blog](https://research.csiro.au/tsblog/sel4-raspberry-pi-3/) (and check out the rest of the blog too!)
 
 ## Serial connection
- Serial TX and RX are located at GPIO pins 14 and
-15 respectively (See Hardware schematic above) 
+
+Serial TX and RX are located at GPIO pins 14 and
+15 respectively (See Hardware schematic above).
 
 ## Reset
-Short the jumper marked "RUN" between the expansion header and USB sockets to
-perform a soft reset of the CPU.
+
+In order to do a soft reset of the Raspberry Pi without having to power-cycle it, you can short
+the jumper marked "RUN" between the expansion header and USB sockets.
 
 ## U-Boot
-
-
-Right now, the default U-Boot will not successfully boot an seL4 image
-on the RPi3, because of cache configuration issues in the seL4
-ELFLoader. This problem can be remedied by having U-Boot disable caches
-before loading seL4. Unfortunately, the stock upstream U-Boot used to
-disable caches before loading the kernel image, but as of this patch
-(<https://github.com/u-boot/u-boot/commit/995eab8b5b580b67394312b1621c60a71042cd18>),
-U-Boot no longer disables caches.
 
 In order to obtain a U-Boot binary that disables caching, you can either
 compile U-Boot from source yourself, or you can
 **[use this prebuilt U-Boot binary image which already works](https://sel4.systems/Info/Docs/u-boot-working-rpi3-32bit-v2017.11.bin)**.
 
-If you choose to build your own U-Boot, then clone U-Boot from upstream,
-then revert commit 995eab8b5b580b67394312b1621c60a71042cd18, and then
-build it:
+The instructions for building U-Boot depend on whether you want to run 32-bit or 64-bit seL4.
+
+Building for 32-bit:
 ```bash
 git clone https://github.com/u-boot/u-boot.git u-boot
 cd u-boot
-git revert 995eab8b5b580b67394312b1621c60a71042cd18
 make CROSS_COMPILE=arm-linux-gnueabi- rpi_3_32b_defconfig
 make CROSS_COMPILE=arm-linux-gnueabi-
 ```
 
+Building for 64-bit:
+```bash
+git clone https://github.com/u-boot/u-boot.git u-boot
+cd u-boot
+make CROSS_COMPILE=aarch64-linux-gnu- rpi_3_b_plus_defconfig
+make CROSS_COMPILE=aarch64-linux-gnu-
+```
+
+After building U-Boot, you should see a file `u-boot.bin`.
+
 This will enable you to get the most up-to-date U-Boot which will boot
 seL4 on the RPi3 successfully.
 
-**NOTE:** Automatic revert is not going to work if you are using the
-latest version of u-boot. You need to manually revert the change by
-looking at the changeset.
-
 Building u-boot using configuration `rpi_3_3b_defconfig` is going to
-produce an image that can boot seL4 on the Raspberry PI Model 3B and
+produce an image that can boot seL4 on the Raspberry Pi Model 3B and
 3B+. Unfortunately for the 3B+ tftp boot is not going to work using
 this version of u-boot (the `tftp` command will report error
 `No Ethernet found`).
@@ -84,7 +81,7 @@ In this case you need to build an image specific for the 3B+.
 Unfortunately the provided defconfig file for the 3B+ model
 (`rpi_3_b_plus_defconfig`) doesn't appear to build correctly.
 
-In order to use tftp boot on a Raspberry PI Model 3B+, use the
+In order to use tftp boot on a Raspberry Pi Model 3B+, use the
 defconfig for the 3B (as described above), then manually change the
 `CONFIG_DEFAULT_DEVICE_TREE` parameter in the `.config` from:
 ```
@@ -97,9 +94,8 @@ CONFIG_DEFAULT_DEVICE_TREE="bcm2837-rpi-3-b-plus"
 Now the generated image should be able to use the on-board
 Ethernet device for TFTP.
 
-
-
 ## SD card setup
+
 The Pi boots from the first FAT32 partition on the
 SD card. Where files are specified, they should be located in the root
 directory of this partition.
@@ -109,11 +105,26 @@ directory of this partition.
 |FSBL |- |Mounts SD and loads SSBL |ROM |
 |SSBL |bootcode.bin|Loads GPU firmware and boots GPU|<https://github.com/raspberrypi/firmware/tree/master/boot> |
 |GPU firmware |start.elf or recovery.elf |Loads CPU bootloader and boots CPU |<https://github.com/raspberrypi/firmware/tree/master/boot> |
-|Usually the Linux kernel, but could also be u-boot |u-boot.bin |u-boot| You can either [use our prebuilt U-Boot which works](https://sel4.systems/Info/Docs/u-boot-working-rpi3-32bit-v2017.11.bin), or compile your own using the instructions above |
+|Usually the Linux kernel, but could also be U-Boot |u-boot.bin |U-Boot| You can either [use our prebuilt U-Boot which works](https://sel4.systems/Info/Docs/u-boot-working-rpi3-32bit-v2017.11.bin), or compile your own using the instructions above |
 ||config.txt|U-Boot parameters |Add enable_uart=1 and kernel=u-boot.bin to the bottom of config.txt (Sample: <http://codepad.org/ykVYFSyP>) |
-||uboot.env |U-Boot saved environment |Generated by u-boot (default environment) bootcmd copied to bootcmd_orig bootcmd and bootdelay removed |
+||uboot.env |U-Boot saved environment |Generated by U-Boot (default environment) bootcmd copied to bootcmd_orig bootcmd and bootdelay removed. You don't need this file when you first set up the SD Card. |
+
+### Config setup
+
+In addition to the above files, the booting process also requires a `config.txt` file that gives parameters to the Raspberry Pi bootloader. More information about the various configj koptions can be found [here](https://www.raspberrypi.com/documentation/computers/config_txt.html).
+
+```
+enable_uart=1
+kernel=u-boot.bin
+```
+
+If you want to boot your Raspberry Pi in 64-bit mode, you will need to add the following line:
+```
+arm_64bit=1
+```
 
 ## Getting seL4 onto your Raspberry Pi 3
+
 In this section you should
 find the two most convenient methods of getting a kernel image booted on
 your RPi3 described. All three methods assume that you have already
@@ -131,7 +142,8 @@ the base set of requirements; you can glance at the table above to see
 the files you'll need and how to obtain them.
 
 ### SD Card
- Get a micro-SD card ready by getting the base files
+
+Get a micro-SD card ready by getting the base files
 copied onto it (See the previous section).
 
 Following this, copy your seL4 image (such as an seL4test image), onto
@@ -161,9 +173,6 @@ dhcp
 tftp 0x10000000 <YOUR_TFTP_SERVER_IP_ADDRESS>:sel4test-driver-image-arm-bcm2837
 bootelf 0x10000000
 ```
-
-If you are using a Raspberry PI Model 3B+, make sure you build the
-correct u-boot image as described above.
 
 To use static IP instead of DHCP, use:
 ```
