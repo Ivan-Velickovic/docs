@@ -54,7 +54,7 @@ A subset of available projects are described below, for a full list see the [lis
 
 ### Hardware and Target Platforms
 
-Read the [Hardware](Hardware) pages to see a list of supported platforms,
+Read the [Platforms](Platforms) pages to see a list of supported platforms,
 and special instructions for particular hardware platforms.
 
 ### Verification Targets and Claims
@@ -144,7 +144,7 @@ For more information on seL4test see its [project page](/seL4Test).
 
 ## Using real hardware
 
-See [Hardware](/Hardware) for supported hardware and how to set it up.
+See [Platforms](/Platforms) for supported platforms and how to set it up.
 
 ## Learn more
 
