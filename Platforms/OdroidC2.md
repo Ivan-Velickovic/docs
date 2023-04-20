@@ -1,6 +1,6 @@
 ---
 toc: true
-arm_hardware: true
+arm_platform: true
 cmake_plat: odroidc2
 xcompiler_arg: -DAARCH64=1
 platform: Odroid-C2

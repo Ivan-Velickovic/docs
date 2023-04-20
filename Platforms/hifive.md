@@ -1,5 +1,5 @@
 ---
-riscv_hardware: true
+riscv_platform: true
 cmake_plat: hifive
 xcompiler_arg: -DRISCV64=1
 platform: HiFive Unleashed

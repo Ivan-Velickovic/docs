@@ -43,7 +43,7 @@ seL4 has support for select ARMv7 and ARMv8 Platforms.
 | - | - | - | - | - | - | - | - | - |
 {%- assign sorted = site.pages | sort: 'platform' %}
 {% for page in sorted %}
-{%- if page.arm_hardware -%}
+{%- if page.arm_platform -%}
 | [{{ page.platform }}]({{page.url}}) | {{ page.soc}} | {{ page.cpu }} | {{ page.arch }} | {{ page.virtualization }} | {{ page.iommu}} | {{ page.Status }} | {{ page.Contrib }} | {{page.Maintained}} |
 {% endif %}
 {%- endfor %}
@@ -55,7 +55,7 @@ We currently provide support for some of the RISC-V platforms. Support for the h
 
 | Platform | Simulation | System-on-chip | Core | Arch | Virtualisation | Status | Contributed by | Maintained by |
 {% for page in sorted %}
-{%- if page.riscv_hardware -%}
+{%- if page.riscv_platform -%}
 | [{{ page.platform }}]({{page.url}}) | {% if page.simulation_target %}Yes{% else %}No{% endif %} | {{ page.soc }} | {{ page.cpu }} | {{ page.arch }} | {{ page.virtualization }} | {{ page.Status }} | {{ page.Contrib }} | {{ page.Maintained }} |
 {% endif %}
 {%- endfor %}

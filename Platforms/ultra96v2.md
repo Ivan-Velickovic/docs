@@ -1,7 +1,7 @@
 ---
 cmake_plat: ultra96v2
 xcompiler_arg: -DAARCH64=1
-arm_hardware: true
+arm_platform: true
 platform: Ultra96v2 Evaluation Kit
 arch: ARMv8A
 virtualization: ARM HYP

@@ -1,5 +1,5 @@
 ---
-riscv_hardware: true
+riscv_platform: true
 cmake_plat: rocketchip
 xcompiler_arg: -DRISCV64=1
 platform: Rocketchip

@@ -1,6 +1,6 @@
 ---
 toc: true
-arm_hardware: true
+arm_platform: true
 cmake_plat: tx1
 xcompiler_arg: -DAARCH64=1
 platform: TX1

@@ -1,5 +1,5 @@
 ---
-arm_hardware: true
+arm_platform: true
 cmake_plat: exynos5250
 xcompiler_arg: -DAARCH32=1
 platform: Arndale

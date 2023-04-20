@@ -1,5 +1,5 @@
 ---
-arm_hardware: true
+arm_platform: true
 simulation_target: true
 cmake_plat: sabre
 xcompiler_arg: -DAARCH32=1

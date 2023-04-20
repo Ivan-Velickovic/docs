@@ -1,5 +1,5 @@
 ---
-arm_hardware: true
+arm_platform: true
 cmake_plat: tk1
 xcompiler_arg: -DAARCH32=1
 platform: TK1-SOM

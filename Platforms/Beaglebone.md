@@ -1,5 +1,5 @@
 ---
-arm_hardware: true
+arm_platform: true
 cmake_plat: am335x-boneblack
 xcompiler_arg: -DAARCH32=1
 platform: BeagleBone Black / Blue

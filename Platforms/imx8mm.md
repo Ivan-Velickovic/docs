@@ -1,6 +1,6 @@
 ---
 toc: true
-arm_hardware: true
+arm_platform: true
 cmake_plat: imx8mm-evk
 xcompiler_arg: -DAARCH64=1
 platform: Imx8mm

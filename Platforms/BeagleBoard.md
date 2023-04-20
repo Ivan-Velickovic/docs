@@ -1,5 +1,5 @@
 ---
-arm_hardware: true
+arm_platform: true
 cmake_plat: omap3
 xcompiler_arg: -DAARCH32=1
 platform: BeagleBoard

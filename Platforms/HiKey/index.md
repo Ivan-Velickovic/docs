@@ -1,5 +1,5 @@
 ---
-arm_hardware: true
+arm_platform: true
 cmake_plat: hikey
 xcompiler_arg: -DAARCH64=1
 platform: HiKey

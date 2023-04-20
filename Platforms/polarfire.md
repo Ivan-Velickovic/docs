@@ -1,5 +1,5 @@
 ---
-riscv_hardware: true
+riscv_platform: true
 cmake_plat: polarfire
 xcompiler_arg: -DSel4testAllowSettingsOverride=True -DElfloaderImage=binary -DKernelVerificationBuild=OFF
 platform: Microchip PolarFire Icicle Kit
